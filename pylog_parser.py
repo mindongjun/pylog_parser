@@ -1,10 +1,11 @@
 import re
 import numpy as np
-import matplotlib.pyplot as plt
 
 fileLocation = "./"
-fileName = "result_retrain.log"
-# targetFileName = "log.csv"
+fileName = "file.log"
+targetFileName = "log.csv"
+
+# REX patterns
 pattern1 = '(?<=accuracy\s=\s).*'
 pattern2 = '(?<= sparsity:\s).*'
 
@@ -13,7 +14,8 @@ class LogParser:
         with open(sFileLocation + fileName, mode="rt", encoding='utf-8') as f:
             string = f.read()
         
-        label = np.expand_dims(np.arange(1,1.3,0.015), axis=1)
+        # index column
+        label = np.expand_dims(np.arange(1,n,1), axis=1)
         label = label.astype('float32')
 #         print(label)
 
@@ -34,17 +36,18 @@ class LogParser:
         sparlist = spar[1::3]
         # print(sparlist)
 
+        # result 
         a = np.column_stack((acculist,sparlist))
         # print(a.dtype)
         result = np.column_stack((label, a))
         result = result.astype('float32')
 
-        ## save as file
-        # for i in result:
-        #     with open(sFileLocation + sTargetFileName, mode="a", encoding='utf-8') as f:
-        #         item = '    '.join(i)
-        #         f.write(item+'\n')
-        # print("success")
+        # save as file
+        for i in result:
+            with open(sFileLocation + sTargetFileName, mode="a", encoding='utf-8') as f:
+                item = '    '.join(i)
+                f.write(item+'\n')
+        print("success")
 
         return result
 
